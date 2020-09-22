@@ -106,12 +106,50 @@ function displayInfo(Data){
             </div>
             <p>${Data.overview}</p> 
         </div>
-    </div>
-
-    <div class="cast">
-        cast
     </div>`
     overlay.innerHTML += overlayContent;
+
+    // movie cast request
+    let castUrl = `https://api.themoviedb.org/3/movie/${Data.id}/credits${API_KEY}` 
+
+    let castDiv = document.createElement('div')
+    castDiv.classList.add('cast')
+    let scrollBtn = document.createElement('button');
+    scrollBtn.innerHTML ="SCROL LEFT";
+    overlay.append(scrollBtn);
+    scrollBtn.addEventListener('mouseover',function(){
+        
+        castDiv.scrollLeft += 150;
+    });
+
+    let scrollrightBtn = document.createElement('button');
+    scrollrightBtn.innerHTML ="SCROL right";
+    overlay.append(scrollrightBtn);
+    scrollrightBtn.addEventListener('click',function(){
+        
+        castDiv.scrollLeft -= 100;
+
+    });
+
+
+
+    overlay.append(castDiv); 
+
+
+
+    let movieCastFetch = fetch(castUrl)
+    console.log(Data.id)
+    movieCastFetch.then(function(response){
+        response.json().then(function (json){
+            json.cast.forEach(Cast => {
+                if(Cast.profile_path){
+                    let castCard = `<div><img src=" ${IMGPATH}${Cast.profile_path} " alt="${Cast.name}"></div>`
+                    console.log("doing")
+                    castDiv.innerHTML += castCard;
+                }
+            });
+        });
+    })
     // card_div.classList.add('card')
     // overlay.append(card_div); 
 }

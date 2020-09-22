@@ -60,7 +60,7 @@ header{
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0, .8);
+    background-color: rgba(0,0,0, .9);
     /* background-color: black; */
     justify-content: space-evenly;
     justify-content: space-between;
@@ -118,6 +118,32 @@ header{
     justify-content: space-between;
     width: 95px;
 }
+
+.cast{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* 
+    transform: rotate(-90deg);
+    transform:rotate(-90deg) translateY(500px);
+    transform-origin: right top; */
+
+} 
+
+.cast::-webkit-scrollbar{
+    width:0;
+}
+
+.cast > div {
+    /* width: 100px; */
+    /* height: 100px; */
+    padding: 15px;
+    /* transform: rotate(90deg); */
+    /* transform-origin: right top; */
+}
+
 
 .show{
     display: flex;
