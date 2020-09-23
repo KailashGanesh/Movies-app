@@ -66,10 +66,10 @@ function homePage(){
 
 function displayInfo(Data){
     overlay.classList.add('show');
-    overlay.innerHTML ='';
+    // overlay.innerHTML ='';
     let rating = Math.round(Data.vote_average/2);
     let star = "";
-    console.log(rating)
+    let titleSize;
     if (rating){
         for (let i=0;i<rating;i++){
             star +=`<i class="fa fa-star" aria-hidden="true"></i>`
@@ -85,14 +85,16 @@ function displayInfo(Data){
             star+=`<i class="fa fa-star-o" aria-hidden="true"></i>`
         }
     }
-    console.log(star)
-    let card_div = document.createElement('div');
-    let overlayContent = `<span class="close-btn" onclick="overlayClose()">&times;</span>
+
+    if(Data.title.length < 16){
+        titleSize = `not-longer-then-16`
+    }
+    overlay.innerHTML = `<span class="close-btn" onclick="overlayClose()">&times;</span>
     <div class="movie-poster">
     <img src="${IMGPATH + Data.poster_path}" alt="${Data.title}">
         <div class="movie-info">
             <div class="title-rating">
-                <h5>${Data.title}</h5>
+                <h1 class="movie-title ${titleSize}">${Data.title}</h1>
 
                 <div class="subtitle">
                     <span>${Data.release_date}</span>
@@ -103,79 +105,70 @@ function displayInfo(Data){
                         <span>${rating}</span>
                     </div>
                 </div>
+
             </div>
             <p>${Data.overview}</p> 
         </div>
     </div>`
-    overlay.innerHTML += overlayContent;
 
-    // movie cast request
+    // movie casts data request from theMoviedb api
     let castUrl = `https://api.themoviedb.org/3/movie/${Data.id}/credits${API_KEY}` 
 
+    // making the cast element for the overlay
     let castDiv = document.createElement('div')
     castDiv.classList.add('cast')
-    let scrollBtn = document.createElement('button');
-    scrollBtn.innerHTML ="SCROL LEFT";
-    overlay.append(scrollBtn);
-    scrollBtn.addEventListener('mouseover',function(){
-        
-        castDiv.scrollLeft += 150;
-    });
+    overlay.append(castDiv);
 
-    let scrollrightBtn = document.createElement('button');
-    scrollrightBtn.innerHTML ="SCROL right";
-    overlay.append(scrollrightBtn);
-    scrollrightBtn.addEventListener('click',function(){
+    // scroll left buttons for the cast element
+    let scrollLeftBtn = document.createElement('button');
+    scrollLeftBtn.classList.add('left-btn')
+    scrollLeftBtn.innerHTML =`<i class="fa fa-arrow-left" aria-hidden="true"></i>`;
+    castDiv.append(scrollLeftBtn);
+    scrollLeftBtn.addEventListener('mouseover',function(){
         
-        castDiv.scrollLeft -= 100;
-
+        castDiv.scrollLeft -= 150;
     });
 
 
-
-    overlay.append(castDiv); 
-
-
-
+    // the cast cards with images
     let movieCastFetch = fetch(castUrl)
     console.log(Data.id)
     movieCastFetch.then(function(response){
         response.json().then(function (json){
             json.cast.forEach(Cast => {
                 if(Cast.profile_path){
-                    let castCard = `<div><img src=" ${IMGPATH}${Cast.profile_path} " alt="${Cast.name}"></div>`
+                    let castCard = document.createElement('div');
+                    castCard.classList.add('item');
+                    castCard.innerHTML =`
+                        <img src="${IMGPATH}${Cast.profile_path}" alt="${Cast.name}">
+                        <div class="cast-info">
+                            <h4>${Cast.name}</h4>
+                            <span>${Cast.character}</span>
+                        </div>`
                     console.log("doing")
-                    castDiv.innerHTML += castCard;
+                    castDiv.append(castCard);
                 }
             });
         });
     })
-    // card_div.classList.add('card')
-    // overlay.append(card_div); 
+
+
+
+    // scroll right button for castDiv
+    let scrollRightBtn = document.createElement('button');
+    scrollRightBtn.classList.add('right-btn');
+    scrollRightBtn.innerHTML =`<i class="fa fa-arrow-right" aria-hidden="true"></i>`;
+    castDiv.append(scrollRightBtn);
+    scrollRightBtn.addEventListener('click',function(){
+        
+        castDiv.scrollLeft += 100;
+
+    });
 }
 
 function overlayClose(){
     overlay.classList.remove('show')
 }
+
+
 homePage();
-
-
-// verseChoose.onchange = function() {
-//     const verse = verseChoose.value;
-//     updateDisplay(verse);
-//   };
-
-//   function updateDisplay(verse){
-//     verse = verse.replace(' ','');
-//     verse = verse.toLowerCase();
-//     let url = verse +'.txt';
-//     let myFetch = fetch(url);
-
-//     myFetch.then(function(response) {
-//       response.text().then(function(text) {
-//         poemDisplay.textContent = text;
-//       });
-//     });
-//   }
-//   updateDisplay('Verse 1');
-//   verseChoose.value = 'Verse 1';
