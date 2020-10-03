@@ -64,8 +64,12 @@ function homePage(){
     })
 }
 
+// overlay display info function
 function displayInfo(Data){
     overlay.classList.add('show');
+    setTimeout(function(){
+        overlay.classList.add('background-blur')
+    }, 200)
     // overlay.innerHTML ='';
     let rating = Math.round(Data.vote_average/2);
     let star = "";
@@ -124,10 +128,11 @@ function displayInfo(Data){
     scrollLeftBtn.classList.add('left-btn')
     scrollLeftBtn.innerHTML =`<i class="fa fa-arrow-left" aria-hidden="true"></i>`;
     castDiv.append(scrollLeftBtn);
-    scrollLeftBtn.addEventListener('mouseover',function(){
+    scrollLeftBtn.addEventListener('mouseover',StartScrollLeft);
+    function StartScrollLeft(){
         
         castDiv.scrollLeft -= 150;
-    });
+    }
 
 
     // the cast cards with images
@@ -156,18 +161,23 @@ function displayInfo(Data){
 
     // scroll right button for castDiv
     let scrollRightBtn = document.createElement('button');
+    let scrollRightInterval;
     scrollRightBtn.classList.add('right-btn');
     scrollRightBtn.innerHTML =`<i class="fa fa-arrow-right" aria-hidden="true"></i>`;
     castDiv.append(scrollRightBtn);
-    scrollRightBtn.addEventListener('click',function(){
-        
-        castDiv.scrollLeft += 100;
-
+    scrollRightBtn.addEventListener('mouseover',startScrollRight);
+    function startScrollRight(){
+        castDiv.scrollRight += 100;
+        scrollRightInterval = setInterval(startScrollRight, 10);
+    }
+    scrollRightBtn.addEventListener('mouseout',function(){
+        clearInterval(scrollRightInterval)
     });
 }
 
 function overlayClose(){
     overlay.classList.remove('show')
+    overlay.classList.remove('background-blur')
 }
 
 
