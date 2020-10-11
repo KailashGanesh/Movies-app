@@ -67,9 +67,7 @@ function homePage(){
 // overlay display info function
 function displayInfo(Data){
     overlay.classList.add('show');
-    setTimeout(function(){
-        overlay.classList.add('background-blur')
-    }, 200)
+    overlay.classList.add('background-blur')
     // overlay.innerHTML ='';
     let rating = Math.round(Data.vote_average/2);
     let star = "";
@@ -125,13 +123,19 @@ function displayInfo(Data){
 
     // scroll left buttons for the cast element
     let scrollLeftBtn = document.createElement('button');
+    let scrollLeftInterval;
     scrollLeftBtn.classList.add('left-btn')
     scrollLeftBtn.innerHTML =`<i class="fa fa-arrow-left" aria-hidden="true"></i>`;
     castDiv.append(scrollLeftBtn);
-    scrollLeftBtn.addEventListener('mouseover',StartScrollLeft);
+    scrollLeftBtn.addEventListener('mouseover',function(){
+        StartScrollLeft();
+        scrollLeftInterval = setInterval(StartScrollLeft, 400);
+    });
+    scrollLeftBtn.addEventListener('mouseout',function(){
+        clearInterval(scrollLeftInterval);
+    });
     function StartScrollLeft(){
-        
-        castDiv.scrollLeft -= 150;
+        castDiv.scrollLeft -= 700;
     }
 
 
@@ -165,14 +169,18 @@ function displayInfo(Data){
     scrollRightBtn.classList.add('right-btn');
     scrollRightBtn.innerHTML =`<i class="fa fa-arrow-right" aria-hidden="true"></i>`;
     castDiv.append(scrollRightBtn);
-    scrollRightBtn.addEventListener('mouseover',startScrollRight);
-    function startScrollRight(){
-        castDiv.scrollRight += 100;
-        scrollRightInterval = setInterval(startScrollRight, 10);
-    }
-    scrollRightBtn.addEventListener('mouseout',function(){
-        clearInterval(scrollRightInterval)
+    scrollRightBtn.addEventListener('mouseover',function(){
+        startScrollRight();
+        scrollRightInterval = setInterval(startScrollRight, 400);
     });
+    scrollRightBtn.addEventListener('mouseout',function(){
+        clearInterval(scrollRightInterval);
+    });
+    function startScrollRight(){
+        console.log("scroll right")
+        castDiv.scrollLeft += 700;
+    }
+
 }
 
 function overlayClose(){
