@@ -145,7 +145,7 @@ header .button{
     display: flex;
     align-items: center;
     justify-content: space-around;
-    width: 95px;
+    width: fit-content;
 }
 
 .cast{
@@ -163,6 +163,15 @@ header .button{
     scroll-behavior: smooth;
 } 
 
+@media (max-height: 800px ){
+    .cast {
+        display: none;
+    }
+    .overlay{
+        justify-content: space-evenly;
+    }
+
+}
 .cast::-webkit-scrollbar{
     width:0; /* Chrome */
 }
@@ -176,10 +185,10 @@ header .button{
 }
 
 .item > img {
-    height: 327px;
-    width: 218px;
-    width: 186px;
-    height: 279px;
+    /* height: 327px; */
+    /* width: 218px; */
+    max-width: 186px;
+    max-height: 279px;
 }
 
 .cast-info{
