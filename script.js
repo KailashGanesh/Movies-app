@@ -1,7 +1,8 @@
 const inputTextBox = document.querySelector("#textbox");
-const submitBtn = document.querySelector("#submit-btn");
+const searchIcon = document.querySelector("#search-icon");
 const output = document.querySelector("#output");
 const overlay = document.querySelector("#overlay");
+
 
 const baseUrl = "https://api.tvmaze.com/search/shows?q="; // tvmaze
 
@@ -10,10 +11,23 @@ const BASEURL = `https://api.themoviedb.org/3/movie/popular${API_KEY}&language=e
 const SEARCHURL = `https://api.themoviedb.org/3/search/movie${API_KEY}&language=en-US&include_adult=false&query=`
 const IMGPATH = 'https://image.tmdb.org/t/p/w500'
 
-submitBtn.addEventListener("click", function (){
+// submitBtn.addEventListener("click", function (){
+//     inputText = inputTextBox.value;
+//     searchForData(inputText);
+// });
+searchIcon.addEventListener('click',function(){
+    inputTextBox.classList.add("show")
+    searchIcon.classList.add("hide")
+})
+
+inputTextBox.addEventListener('keyup', function(e){
     inputText = inputTextBox.value;
-    searchForData(inputText);
-});
+    console.log(inputTextBox.value)
+    if (e.keyCode === 13){
+        e.preventDefault()
+        searchForData(inputText);
+    }
+})
 
 function searchForData(search){
     search = search.replace(' ','%20'); // convert spaces into %20
@@ -23,7 +37,7 @@ function searchForData(search){
             displayResults(json);
         });
     });
-
+    inputTextBox.value = '';
 }
 
 function homePage(){
@@ -40,13 +54,14 @@ function displayResults(json){
     console.log(json)
     json.results.forEach(popMovie => {
         if (popMovie.poster_path){
+            let rating = Math.round(popMovie.vote_average/2); //calculate rating out of 5 from out of 10
             let card_div = document.createElement('div')
             let card = `<div class="poster">
                 <img src="${IMGPATH + popMovie.poster_path}" alt="${popMovie.title}">
                 </div>
                 <div class="card-info">
                 <h5>${popMovie.title}</h5>
-                <span>${popMovie.vote_average}</span>
+                <span>${rating}</span>
             </div>`
             card_div.innerHTML += card;
             card_div.classList.add('card')
@@ -146,6 +161,8 @@ function displayInfo(Data){
                             <h4>${Cast.name}</h4>
                             <span>${Cast.character}</span>
                         </div>`
+                    document.addEventListener('click',function(){
+                    })
                     castDiv.append(castCard);
                 }
             });
